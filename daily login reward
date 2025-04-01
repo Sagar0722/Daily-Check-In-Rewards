@@ -1,0 +1,19 @@
+pragma solidity ^0.8.0;
+
+contract DailyLoginReward {
+    mapping(address => uint256) public lastClaimed;
+    mapping(address => uint256) public balances;
+    uint256 public rewardAmount = 1 ether; // Reward amount per day
+    uint256 public claimInterval = 1 days;
+
+    function claimReward() public {
+        require(block.timestamp >= lastClaimed[msg.sender] + claimInterval, "Claim too soon");
+        
+        lastClaimed[msg.sender] = block.timestamp;
+        balances[msg.sender] += rewardAmount;
+    }
+    
+    function getBalance() public view returns (uint256) {
+        return balances[msg.sender];
+    }
+}
